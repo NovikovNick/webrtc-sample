@@ -1,0 +1,37 @@
+---
+# Linter configuration for geometry sandbox.
+# Disabled in code:
+#   cppcoreguidelines-pro-bounds-pointer-arithmetic: due to limitations of the raylib API
+#   *-using-namespace: for DSL usage
+#   *-magic-numbers: a lot of values are self-describle. Like 180, 90 degree. Or multiply by 0.5 to get half
+#
+# Completely disabled:
+#   modernize-use-trailing-return-type: I just don't like the way it looks.
+#   readability-identifier-length: 'it', 'io', 'ms', 'ui', 'id' are quite clear when used in a particular context. The same applies to 'x', 'y', 'z', 'w' and so on in certain mathematical methods.
+#   misc-const-correctness: a lot of false positive 
+#   misc-include-cleaner: a lot of false positive 
+Checks: >
+    -*,
+    bugprone-*,
+    cert-*,
+    clang-analyzer-*,
+    concurrency-*,
+    google-*,
+    cppcoreguidelines-*,
+    misc-*,
+    -misc-const-correctness,
+    -misc-include-cleaner,
+    modernize-*,
+    -modernize-use-trailing-return-type,
+    performance-*,
+    portability-*,
+    readability-*,
+    -readability-identifier-length, 
+
+CheckOptions:
+  readability-identifier-naming.PrivateMemberSuffix: _
+
+HeaderFilterRegex: '^src/.*'
+
+WarningsAsErrors: '*'
+...

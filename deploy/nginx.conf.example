@@ -1,0 +1,21 @@
+# Replace rtc.example.com and certificate paths.
+# C++ signaling server listens on 127.0.0.1:8080 without TLS;
+# nginx terminates HTTPS/WSS and forwards the WebSocket upgrade.
+server {
+    listen 443 ssl;
+    server_name rtc.example.com;
+
+    ssl_certificate     /etc/letsencrypt/live/rtc.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/rtc.example.com/privkey.pem;
+
+    location /ws {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+    }
+}

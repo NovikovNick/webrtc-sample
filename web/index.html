@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>C++ WebRTC DataChannel demo</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 18px;
+      background: #0b1220;
+      color: #e5e7eb;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+    }
+
+    .panel {
+      background: #111c2e;
+      border: 1px solid #29364b;
+      border-radius: 14px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input[type=text] {
+      flex: 1;
+      min-width: 180px;
+      padding: 11px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background: #0b1220;
+      color: #fff;
+    }
+
+    input[type=file] {
+      max-width: 100%;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 15px;
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #475569;
+    }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    #status {
+      font-weight: 700;
+    }
+
+    #log {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: #070d17;
+      border-radius: 8px;
+      min-height: 170px;
+      max-height: 360px;
+      overflow: auto;
+      padding: 12px;
+      font: 13px/1.5 ui-monospace, monospace;
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: .92rem;
+    }
+  </style>
+  <script src="./config.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+
+<body>
+  <section class="panel">
+    <div>Connection: <span id="status">disconnected</span></div>
+    <p class="muted" id="session">Session: —</p>
+    <div class="row">
+      <button id="connectBtn">Connect</button>
+      <button id="disconnectBtn" class="secondary" disabled>Disconnect</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Send text</h2>
+    <form id="sendForm" class="row">
+      <input id="messageInput" type="text" maxlength="16000" placeholder="Message to C++ server" autocomplete="off">
+      <button id="sendBtn" type="submit" disabled>Send</button>
+    </form>
+    <p class="muted">The demo server echoes text messages back with the prefix <code>echo:</code>.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Event log</h2>
+    <div id="log" aria-live="polite"></div>
+  </section>
+</body>
+
+</html>
