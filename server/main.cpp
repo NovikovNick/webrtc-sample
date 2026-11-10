@@ -44,19 +44,20 @@ struct ServerState
 {
 	PeerId sequencePeerId_ = 0;
 	std::unordered_map<PeerId, SignalingSession> sessions_;
+	std::unordered_map<WebSocketPtr, PeerId> peers_;
 	PeerId awaitingAnotherPeerId_ = 0;
 };
 
 SignalingMessage convert(const Json& message)
 {
 	SignalingMessage res;
-	res.sdp				   = message.value("sdp", "");
-	res.candidate		   = message.value("candidate", "");
-	res.sdpMid			   = message.value("sdpMid", "");
-	res.sdpMLineIndex	   = message.value("sdpMLineIndex", 0);
-	res.to				   = message.value("to", 0);
+	res.sdp			  = message.value("sdp", "");
+	res.candidate	  = message.value("candidate", "");
+	res.sdpMid		  = message.value("sdpMid", "");
+	res.sdpMLineIndex = message.value("sdpMLineIndex", 0);
+	res.to			  = message.value("to", 0);
 
-	const std::string type = message.value("type", "");
+	std::string type  = message.value("type", "");
 	if (type == "join")
 	{
 		res.type = SingnalingPhase::Join;
@@ -126,10 +127,11 @@ int main()
 					{
 						case SingnalingPhase::Join:
 						{
-							PeerId id			= ++state.sequencePeerId_;
-							state.sessions_[id] = SignalingSession{.session = client,
-																   .peerId	= id,
-																   .type = SingnalingPhase::Join};
+							PeerId id			 = ++state.sequencePeerId_;
+							state.sessions_[id]	 = SignalingSession{.session = client,
+																	.peerId	 = id,
+																	.type = SingnalingPhase::Join};
+							state.peers_[client] = id;
 
 							if (state.awaitingAnotherPeerId_ == 0)
 							{
@@ -202,8 +204,18 @@ int main()
 					}
 				});
 
-			client->onClosed([]() { std::cout << "[CLIENT] Disconnected" << std::endl; });
-			client->onError([](std::string error)
+			client->onClosed(
+				[client, &state]()
+				{
+					const PeerId pid			 = state.peers_[client];
+
+					state.awaitingAnotherPeerId_ = 0;
+					state.sessions_.erase(pid);
+					state.peers_.erase(client);
+
+					std::cout << std::format("[CLIENT] Disconnected {}", pid) << std::endl;
+				});
+			client->onError([client](std::string error)
 							{ std::cerr << "[CLIENT] Error: " << error << std::endl; });
 		});
 

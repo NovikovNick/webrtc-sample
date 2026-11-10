@@ -11,6 +11,7 @@
   const disconnectBtn = $("disconnectBtn");
   const sendBtn = $("sendBtn");
   const sendInput = $("messageInput");
+  const signalingUrl = $("signalingUrl");
 
   let ws = null;
   let pc = null;
@@ -255,7 +256,7 @@
   }
 
   function connect() {
-    const url = config.signalingUrl;
+    const url = signalingUrl.value;
 
     if (!url || !url.startsWith("ws")) {
       log("Set signalingUrl in web/config.js");
@@ -341,4 +342,5 @@
   disconnectBtn.addEventListener("click", disconnect);
 
   updateUI();
+  signalingUrl.value = config.signalingUrl;
 })();
