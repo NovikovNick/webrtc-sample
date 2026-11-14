@@ -3,6 +3,6 @@
 window.WEBRTC_CONFIG = {
   signalingUrl: "ws://localhost:8080/ws",
   iceServers: [
-    { urls: "stun:stun.l.google.com:19302" }
+    { urls: "stun:193.233.137.121:3478" }
   ]
 };

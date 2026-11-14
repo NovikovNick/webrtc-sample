@@ -3,10 +3,10 @@
 # nginx terminates HTTPS/WSS and forwards the WebSocket upgrade.
 server {
     listen 443 ssl;
-    server_name rtc.example.com;
+    server_name _;
 
-    ssl_certificate     /etc/letsencrypt/live/rtc.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/rtc.example.com/privkey.pem;
+    ssl_certificate     /etc/nginx/ssl/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
 
     location /ws {
         proxy_pass http://127.0.0.1:8080;
@@ -17,5 +17,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_read_timeout 3600s;
         proxy_send_timeout 3600s;
+        proxy_buffering off;
     }
 }
+

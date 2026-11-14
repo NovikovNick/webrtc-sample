@@ -256,7 +256,14 @@
   }
 
   function connect() {
-    const url = signalingUrl.value;
+    const host = signalingUrl.value;
+
+    const url = `wss://${host}:443/ws`;
+    config.iceServers = [
+      { urls: `stun:${host}:3478` }
+    ];
+    log(`Trying to connect to ${host}`);
+
 
     if (!url || !url.startsWith("ws")) {
       log("Set signalingUrl in web/config.js");
@@ -342,5 +349,4 @@
   disconnectBtn.addEventListener("click", disconnect);
 
   updateUI();
-  signalingUrl.value = config.signalingUrl;
 })();
